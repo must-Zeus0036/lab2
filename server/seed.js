@@ -1,0 +1,68 @@
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const Employee = require('./models/Employee');
+const Project = require('./models/Project');
+const ProjectAssignment = require('./models/ProjectAssignment');
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log('MongoDB connected');
+    addData(); // Call the function to add new data
+}).catch(err => console.log(err));
+
+// Function to add new data
+async function addData() {
+    try {
+        // Clear existing data
+        await Employee.deleteMany({});
+        await Project.deleteMany({});
+        await ProjectAssignment.deleteMany({});
+
+        // add new employees 
+        const newEmployees = await Employee.insertMany([
+            { employee_id: 'E006', full_name: 'Mustafa Al-Bayati', email: 'john@example.com', hashed_password: 'hashed6' },
+            { employee_id: 'E007', full_name: 'Dani Dani', email: 'jane@example.com', hashed_password: 'hashed7' },
+            { employee_id: 'E008', full_name: 'Ryad Ryad', email: 'john.doe@example.com', hashed_password: 'hashed8' },
+            { employee_id: 'E009', full_name: 'Sara Sara', email: 'sara@example.com', hashed_password: 'hashed9' },
+            { employee_id: 'E010', full_name: 'Tara Tara', email: 'tara@example.com', hashed_password: 'hashed10' },
+            
+        ]);
+
+        console.log('New Employees:', newEmployees);
+
+        // Add new projects
+        const newProjects = await Project.insertMany([
+            { project_code: 'P105', project_name: 'Lund', project_description: 'Security platform' },
+            { project_code: 'P106', project_name: 'Ares', project_description: 'Game development' },
+            { project_code: 'P107', project_name: 'HKR', project_description: 'Cloud computing' },
+            { project_code: 'P108', project_name: 'Aero', project_description: 'AI and ML' },
+            { project_code: 'P109', project_name: 'Luna', project_description: 'Web development' },
+            
+        ]);
+
+        console.log('New Projects:', newProjects);
+
+        // Add new project assignments
+        const newAssignments = await ProjectAssignment.insertMany([
+            { employee_id: newEmployees[0]._id, project_code: newProjects[0]._id, start_date: new Date() },
+            { employee_id: newEmployees[1]._id, project_code: newProjects[1]._id, start_date: new Date() },
+            { employee_id: newEmployees[2]._id, project_code: newProjects[2]._id, start_date: new Date() },
+            { employee_id: newEmployees[3]._id, project_code: newProjects[3]._id, start_date: new Date() },
+            { employee_id: newEmployees[4]._id, project_code: newProjects[4]._id, start_date: new Date() },
+            
+
+            
+        ]);
+
+        console.log('New Project Assignments:', newAssignments); // Log the new assignments
+
+        process.exit();
+    } catch (err) {
+        console.error('Error adding data:', err);
+        process.exit(1); // Exit with error code
+    }
+}
