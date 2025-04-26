@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
+const bcrypt = require('bcryptjs');
 
 const Employee = require('./models/Employee');
 const Project = require('./models/Project');
@@ -22,17 +23,29 @@ async function addData() {
         await Project.deleteMany({});
         await ProjectAssignment.deleteMany({});
 
-        // add new employees 
-        const newEmployees = await Employee.insertMany([
-            { employee_id: 'E006', full_name: 'Mustafa Al-Bayati', email: 'john@example.com', hashed_password: 'hashed6' },
-            { employee_id: 'E007', full_name: 'Dani Dani', email: 'jane@example.com', hashed_password: 'hashed7' },
-            { employee_id: 'E008', full_name: 'Ryad Ryad', email: 'john.doe@example.com', hashed_password: 'hashed8' },
-            { employee_id: 'E009', full_name: 'Sara Sara', email: 'sara@example.com', hashed_password: 'hashed9' },
-            { employee_id: 'E010', full_name: 'Tara Tara', email: 'tara@example.com', hashed_password: 'hashed10' },
-            
-        ]);
+        console.log('Existing data cleared.');
 
-        console.log('New Employees:', newEmployees);
+        // Add new employees
+        const employees = [
+            { employee_id: 'E006', full_name: 'Mustafa Al-Bayati', email: 'john@example.com' },
+            { employee_id: 'E007', full_name: 'Dani Dani', email: 'jane@example.com' },
+            { employee_id: 'E008', full_name: 'Ryad Ryad', email: 'john.doe@example.com' },
+            { employee_id: 'E009', full_name: 'Sara Sara', email: 'sara@example.com' },
+            { employee_id: 'E010', full_name: 'Tara Tara', email: 'tara@example.com' },
+        ];
+
+        // Hash passwords for each employee
+        const hashedEmployees = await Promise.all(
+            employees.map(async (employee) => {
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(employee.full_name, salt); // Using full_name as the password
+                return { ...employee, hashed_password: hashedPassword };
+            })
+        );
+
+        // Insert employees with hashed passwords
+        const newEmployees = await Employee.insertMany(hashedEmployees);
+        console.log('New Employees with Hashed Passwords:', newEmployees);
 
         // Add new projects
         const newProjects = await Project.insertMany([
@@ -41,7 +54,6 @@ async function addData() {
             { project_code: 'P107', project_name: 'HKR', project_description: 'Cloud computing' },
             { project_code: 'P108', project_name: 'Aero', project_description: 'AI and ML' },
             { project_code: 'P109', project_name: 'Luna', project_description: 'Web development' },
-            
         ]);
 
         console.log('New Projects:', newProjects);
@@ -53,16 +65,13 @@ async function addData() {
             { employee_id: newEmployees[2]._id, project_code: newProjects[2]._id, start_date: new Date() },
             { employee_id: newEmployees[3]._id, project_code: newProjects[3]._id, start_date: new Date() },
             { employee_id: newEmployees[4]._id, project_code: newProjects[4]._id, start_date: new Date() },
-            
-
-            
         ]);
 
-        console.log('New Project Assignments:', newAssignments); // Log the new assignments
+        console.log('New Project Assignments:', newAssignments);
 
         process.exit();
     } catch (err) {
         console.error('Error adding data:', err);
-        process.exit(1); // Exit with error code
+        process.exit(1);
     }
 }

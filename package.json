@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "gitignore": "^0.7.0",
     "mongodb": "^6.15.0",
@@ -13,7 +14,6 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && nodemon index.js",
     "client": "cd client && npm run dev"
-    
   },
   "name": "fullstack-app",
   "version": "1.0.0",
