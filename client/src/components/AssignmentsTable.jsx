@@ -3,20 +3,14 @@ import axios from 'axios';
 
 function AssignmentTable() {
     const [data, setData] = useState([]);
-    const [sortField, setSortField] = useState("start_date");
     const [asc, setAsc] = useState(false);
 
     const fetchData = async () => {
         try {
             const res = await axios.get('http://localhost:5000/api/project_assignments');
             console.log('Fetched Data:', res.data); // Check if data is being fetched
-            let sorted = res.data.sort((a, b) => {
-                let valA = a[sortField]?.full_name ?? a[sortField];
-                let valB = b[sortField]?.full_name ?? b[sortField];
-            
-                return asc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-            });
-            setData(sorted); // Fetch all records from seed.js
+            let shuffled = res.data.sort(() => Math.random() - 0.5); // Shuffle the records randomly
+            setData(shuffled); // Update the data with shuffled records
         } catch (err) {
             console.error("Error fetching data:", err.message);
         }
@@ -24,14 +18,9 @@ function AssignmentTable() {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 6000); // Fetch data every minute
+        const interval = setInterval(fetchData, 6000);
         return () => clearInterval(interval);
-    }, [sortField, asc]);
-
-    const handleSort = (field) => {
-        setSortField(field);
-        setAsc(!asc);
-    };
+    }, []);
 
     return (
         <div>
