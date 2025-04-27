@@ -16,6 +16,18 @@ function AssignmentTable() {
         }
     };
 
+    const handleSort = (key) => {
+        const sortedData = [...data].sort((a, b) => {
+            if (asc) {
+                return (a[key] > b[key] ? 1 : -1);
+            } else {
+                return (a[key] < b[key] ? 1 : -1);
+            }
+        });
+        setData(sortedData);
+        setAsc(!asc);
+    };
+
     useEffect(() => {
         fetchData();
         const interval = setInterval(fetchData, 6000);
