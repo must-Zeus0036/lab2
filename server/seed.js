@@ -27,9 +27,9 @@ async function addData() {
 
         // Add new employees
         const employees = [
-            { employee_id: 'E006', full_name: 'Mustafa Al-Bayati', email: 'john@example.com' },
-            { employee_id: 'E007', full_name: 'Dani Dani', email: 'jane@example.com' },
-            { employee_id: 'E008', full_name: 'Ryad Ryad', email: 'john.doe@example.com' },
+            { employee_id: 'E006', full_name: 'Nora Nora', email: 'john@example.com' },
+            { employee_id: 'E007', full_name: 'Nike Nike', email: 'jane@example.com' },
+            { employee_id: 'E008', full_name: 'Puma Puma', email: 'john.doe@example.com' },
             { employee_id: 'E009', full_name: 'Sara Sara', email: 'sara@example.com' },
             { employee_id: 'E010', full_name: 'Tara Tara', email: 'tara@example.com' },
         ];
@@ -49,11 +49,11 @@ async function addData() {
 
         // Add new projects
         const newProjects = await Project.insertMany([
-            { project_code: 'P105', project_name: 'Lund', project_description: 'Security platform' },
-            { project_code: 'P106', project_name: 'Ares', project_description: 'Game development' },
-            { project_code: 'P107', project_name: 'HKR', project_description: 'Cloud computing' },
-            { project_code: 'P108', project_name: 'Aero', project_description: 'AI and ML' },
-            { project_code: 'P109', project_name: 'Luna', project_description: 'Web development' },
+            { project_code: 'P105', project_name: 'TorBora', project_description: 'Security Security' },
+            { project_code: 'P106', project_name: 'BigBen', project_description: 'Game Game' },
+            { project_code: 'P107', project_name: 'HKR', project_description: 'Cloud Google' },
+            { project_code: 'P108', project_name: 'Malmö', project_description: 'AI AI' },
+            { project_code: 'P109', project_name: 'Lund', project_description: 'Web Web' },
         ]);
 
         console.log('New Projects:', newProjects);
